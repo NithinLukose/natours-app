@@ -6,14 +6,14 @@ const userRouter = require("./routes/userRoutes");
 const app = express();
 
 //middleware
-app.use(morgan("dev"));
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
+
 app.use(express.json());
+app.use(express.static(`${__dirname}/public`));
 
 app.use("/api/v1/tours", tourRouter);
 app.use("/api/v1/users", userRouter);
 
-const port = 3000;
-
-app.listen(port, () => {
-  console.log("running on port 3000");
-});
+module.exports = app;
