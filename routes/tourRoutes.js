@@ -3,6 +3,11 @@ const tourController = require("../controller/tourController");
 
 const router = express.Router();
 
+router.route("/tour-stats").get(tourController.getTourStats);
+router
+  .route("/top-5-tours")
+  .get(tourController.aliasTopTours, tourController.getAllTours);
+
 router
   .route("/")
   .get(tourController.getAllTours)
