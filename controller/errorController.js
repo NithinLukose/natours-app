@@ -28,7 +28,7 @@ const handleCastError = (err) => {
   return new AppError(message, 400);
 };
 
-const handleDuplicateFieldsDB = (err) => {
+const handleDuplicateFieldsDB = () => {
   const message = `Duplicate field value`;
   return new AppError(message, 400);
 };
@@ -37,6 +37,10 @@ const handleValidationError = (err) => {
   const errors = Object.values(err.errors).map((error) => error.message);
   const message = `invalid input data. ${errors.join(". ")}`;
   return new AppError(message, 400);
+};
+
+const handleJWTError = () => {
+  return new AppError("Invalid token please login again", 401);
 };
 
 module.exports = (err, req, res, next) => {
@@ -53,8 +57,10 @@ module.exports = (err, req, res, next) => {
       error = handleDuplicateFieldsDB(err);
     }
     if (err.name === "ValidationError") {
-      console.log(err.errors);
       error = handleValidationError(err);
+    }
+    if (err.name === "JsonWebTokenError") {
+      error = handleJWTError();
     }
     sendErrProd(error, res);
   }
